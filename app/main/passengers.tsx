@@ -53,11 +53,14 @@ export default function PassengersScreen() {
     console.log('Removing passenger:', id);
     if (passengers.length > 1) {
       setPassengers(prev => prev.filter(passenger => passenger.id !== id));
+    } else {
+      Alert.alert('Error', 'At least one passenger is required');
     }
   };
 
   const handleContinue = () => {
     console.log('Continue with passengers:', passengers);
+    console.log('Total price:', totalPrice);
     
     // Validate all passengers have required fields
     const isValid = passengers.every(passenger => 
@@ -69,7 +72,21 @@ export default function PassengersScreen() {
       return;
     }
 
-    router.push('/main/booking-confirmation');
+    // Check if documents are uploaded (in a real app, this would be stored in state/context)
+    Alert.alert(
+      'Document Upload Required',
+      'Before confirming your booking, please ensure you have uploaded copies of your passport and credit card details.',
+      [
+        {
+          text: 'Upload Documents',
+          onPress: () => router.push('/auth/document-upload')
+        },
+        {
+          text: 'Continue to Booking',
+          onPress: () => router.push('/main/booking-confirmation')
+        }
+      ]
+    );
   };
 
   const handleBack = () => {
@@ -105,6 +122,31 @@ export default function PassengersScreen() {
             </View>
           </View>
 
+          {/* Price Summary at Top */}
+          <View style={commonStyles.section}>
+            <View style={[commonStyles.card, { backgroundColor: colors.backgroundAlt }]}>
+              <View style={[commonStyles.row, { marginBottom: 8 }]}>
+                <Icon name="calculator" size={20} color={colors.primary} />
+                <Text style={[commonStyles.text, { marginLeft: 8, fontWeight: '600' }]}>
+                  Price Calculator
+                </Text>
+              </View>
+              
+              <View style={[commonStyles.row, { marginBottom: 8 }]}>
+                <Text style={commonStyles.textLight}>
+                  {passengers.length} passenger{passengers.length > 1 ? 's' : ''} × SBD {pricePerPerson} per person
+                </Text>
+                <Text style={[commonStyles.text, { fontWeight: '600', color: colors.primary }]}>
+                  SBD {totalPrice}
+                </Text>
+              </View>
+              
+              <Text style={[commonStyles.textLight, { fontSize: 12 }]}>
+                Price updates automatically as you add or remove passengers
+              </Text>
+            </View>
+          </View>
+
           {/* Passengers List */}
           <View style={commonStyles.section}>
             {passengers.map((passenger, index) => (
@@ -123,7 +165,7 @@ export default function PassengersScreen() {
                   )}
                 </View>
 
-                <Text style={commonStyles.inputLabel}>First Name</Text>
+                <Text style={commonStyles.inputLabel}>First Name *</Text>
                 <TextInput
                   style={commonStyles.input}
                   value={passenger.firstName}
@@ -132,7 +174,7 @@ export default function PassengersScreen() {
                   placeholderTextColor={colors.textLight}
                 />
 
-                <Text style={commonStyles.inputLabel}>Last Name</Text>
+                <Text style={commonStyles.inputLabel}>Last Name *</Text>
                 <TextInput
                   style={commonStyles.input}
                   value={passenger.lastName}
@@ -141,7 +183,7 @@ export default function PassengersScreen() {
                   placeholderTextColor={colors.textLight}
                 />
 
-                <Text style={commonStyles.inputLabel}>Email Address</Text>
+                <Text style={commonStyles.inputLabel}>Email Address *</Text>
                 <TextInput
                   style={commonStyles.input}
                   value={passenger.email}
@@ -152,7 +194,7 @@ export default function PassengersScreen() {
                   autoCapitalize="none"
                 />
 
-                <Text style={commonStyles.inputLabel}>Mobile Number</Text>
+                <Text style={commonStyles.inputLabel}>Mobile Number *</Text>
                 <TextInput
                   style={[commonStyles.input, { marginBottom: 0 }]}
                   value={passenger.mobile}
@@ -184,30 +226,52 @@ export default function PassengersScreen() {
               <Text style={[commonStyles.text, { color: colors.primary, marginTop: 8 }]}>
                 Add Another Passenger
               </Text>
+              <Text style={[commonStyles.textLight, { marginTop: 4, fontSize: 12 }]}>
+                +SBD {pricePerPerson} per additional passenger
+              </Text>
             </TouchableOpacity>
           </View>
 
-          {/* Price Summary */}
+          {/* Document Requirements */}
           <View style={commonStyles.section}>
             <View style={[commonStyles.card, { backgroundColor: colors.backgroundAlt }]}>
-              <Text style={[commonStyles.text, { fontWeight: '600', marginBottom: 16 }]}>
-                Price Summary
-              </Text>
-              
               <View style={[commonStyles.row, { marginBottom: 8 }]}>
-                <Text style={commonStyles.textLight}>
-                  {passengers.length} passenger{passengers.length > 1 ? 's' : ''} × SBD {pricePerPerson}
-                </Text>
-                <Text style={commonStyles.text}>
-                  SBD {passengers.length * pricePerPerson}
+                <Icon name="document-text" size={20} color={colors.primary} />
+                <Text style={[commonStyles.text, { marginLeft: 8, fontWeight: '600' }]}>
+                  Required Documents
                 </Text>
               </View>
-              
-              <View style={[commonStyles.row, { paddingTop: 16, borderTopWidth: 1, borderTopColor: colors.border }]}>
-                <Text style={[commonStyles.text, { fontWeight: '600' }]}>
-                  Total Amount
+              <Text style={commonStyles.textLight}>
+                Before booking, ensure you have uploaded:
+              </Text>
+              <View style={[commonStyles.row, { marginTop: 8, alignItems: 'center' }]}>
+                <Icon name="checkmark-circle" size={16} color={colors.success} />
+                <Text style={[commonStyles.textLight, { marginLeft: 8 }]}>
+                  Copy of passport
                 </Text>
-                <Text style={[commonStyles.text, { fontWeight: '700', fontSize: 18, color: colors.primary }]}>
+              </View>
+              <View style={[commonStyles.row, { marginTop: 4, alignItems: 'center' }]}>
+                <Icon name="checkmark-circle" size={16} color={colors.success} />
+                <Text style={[commonStyles.textLight, { marginLeft: 8 }]}>
+                  Copy of credit card details
+                </Text>
+              </View>
+            </View>
+          </View>
+
+          {/* Final Price Summary */}
+          <View style={commonStyles.section}>
+            <View style={[commonStyles.card, { backgroundColor: colors.primary, opacity: 0.1 }]}>
+              <View style={[commonStyles.row, { alignItems: 'center' }]}>
+                <View style={{ flex: 1 }}>
+                  <Text style={[commonStyles.text, { fontWeight: '600', color: colors.primary }]}>
+                    Total Amount
+                  </Text>
+                  <Text style={[commonStyles.textLight, { fontSize: 12 }]}>
+                    {passengers.length} passenger{passengers.length > 1 ? 's' : ''} × SBD {pricePerPerson}
+                  </Text>
+                </View>
+                <Text style={[commonStyles.text, { fontWeight: '700', fontSize: 24, color: colors.primary }]}>
                   SBD {totalPrice}
                 </Text>
               </View>

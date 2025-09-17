@@ -15,10 +15,10 @@ export default function FlightInfoScreen() {
   const [flightData, setFlightData] = useState({
     flightNumber: '',
     airline: '',
-    departureDate: new Date(),
-    departureTime: new Date(),
     arrivalDate: new Date(),
     arrivalTime: new Date(),
+    departureDate: new Date(),
+    departureTime: new Date(),
     departureAirport: '',
     arrivalAirport: '',
     tripType: 'one-way', // 'one-way' or 'round-trip'
@@ -197,7 +197,7 @@ export default function FlightInfoScreen() {
           <View style={commonStyles.section}>
             <View style={commonStyles.card}>
               <Text style={[commonStyles.text, { fontWeight: '600', marginBottom: 16 }]}>
-                Departure Details
+                Arrival Details
               </Text>
               
               <View style={[commonStyles.row, { marginBottom: 16 }]}>
@@ -205,10 +205,10 @@ export default function FlightInfoScreen() {
                   <Text style={commonStyles.inputLabel}>Date</Text>
                   <TouchableOpacity
                     style={[commonStyles.input, { justifyContent: 'center' }]}
-                    onPress={() => showDateTimePicker('departureDate', 'date')}
+                    onPress={() => showDateTimePicker('arrivalDate', 'date')}
                   >
                     <Text style={{ color: colors.text }}>
-                      {formatDate(flightData.departureDate)}
+                      {formatDate(flightData.arrivalDate)}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -216,10 +216,10 @@ export default function FlightInfoScreen() {
                   <Text style={commonStyles.inputLabel}>Time</Text>
                   <TouchableOpacity
                     style={[commonStyles.input, { justifyContent: 'center' }]}
-                    onPress={() => showDateTimePicker('departureTime', 'time')}
+                    onPress={() => showDateTimePicker('arrivalTime', 'time')}
                   >
                     <Text style={{ color: colors.text }}>
-                      {formatTime(flightData.departureTime)}
+                      {formatTime(flightData.arrivalTime)}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -228,7 +228,7 @@ export default function FlightInfoScreen() {
               {flightData.tripType === 'round-trip' && (
                 <>
                   <Text style={[commonStyles.text, { fontWeight: '600', marginBottom: 16 }]}>
-                    Return Details
+                    Return Departure Details
                   </Text>
                   
                   <View style={commonStyles.row}>
@@ -236,10 +236,10 @@ export default function FlightInfoScreen() {
                       <Text style={commonStyles.inputLabel}>Date</Text>
                       <TouchableOpacity
                         style={[commonStyles.input, { justifyContent: 'center' }]}
-                        onPress={() => showDateTimePicker('arrivalDate', 'date')}
+                        onPress={() => showDateTimePicker('departureDate', 'date')}
                       >
                         <Text style={{ color: colors.text }}>
-                          {formatDate(flightData.arrivalDate)}
+                          {formatDate(flightData.departureDate)}
                         </Text>
                       </TouchableOpacity>
                     </View>
@@ -247,16 +247,37 @@ export default function FlightInfoScreen() {
                       <Text style={commonStyles.inputLabel}>Time</Text>
                       <TouchableOpacity
                         style={[commonStyles.input, { justifyContent: 'center', marginBottom: 0 }]}
-                        onPress={() => showDateTimePicker('arrivalTime', 'time')}
+                        onPress={() => showDateTimePicker('departureTime', 'time')}
                       >
                         <Text style={{ color: colors.text }}>
-                          {formatTime(flightData.arrivalTime)}
+                          {formatTime(flightData.departureTime)}
                         </Text>
                       </TouchableOpacity>
                     </View>
                   </View>
                 </>
               )}
+            </View>
+          </View>
+
+          {/* Document Requirements Notice */}
+          <View style={commonStyles.section}>
+            <View style={[commonStyles.card, { backgroundColor: colors.backgroundAlt }]}>
+              <View style={[commonStyles.row, { marginBottom: 8 }]}>
+                <Icon name="information-circle" size={20} color={colors.primary} />
+                <Text style={[commonStyles.text, { marginLeft: 8, fontWeight: '600' }]}>
+                  Required Documents
+                </Text>
+              </View>
+              <Text style={commonStyles.textLight}>
+                To complete your shuttle booking, you&apos;ll need to upload:
+              </Text>
+              <Text style={[commonStyles.textLight, { marginTop: 4 }]}>
+                • Copy of passport
+              </Text>
+              <Text style={[commonStyles.textLight, { marginTop: 2 }]}>
+                • Copy of credit card details
+              </Text>
             </View>
           </View>
 
