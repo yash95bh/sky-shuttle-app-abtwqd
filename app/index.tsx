@@ -1,52 +1,97 @@
-import React, { useState } from 'react';
-import { Text, View, Image, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { Text, View, ScrollView } from 'react-native';
 import { commonStyles, colors } from '../styles/commonStyles';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import SimpleBottomSheet from '../components/BottomSheet';
+import { router } from 'expo-router';
+import Button from '../components/Button';
+import Icon from '../components/Icon';
 
+export default function WelcomeScreen() {
+  console.log('WelcomeScreen rendered');
 
-export default function MainScreen() {
-  const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
+  const handleSignUp = () => {
+    console.log('Navigate to signup');
+    router.push('/auth/signup');
+  };
 
-  const handleOpenBottomSheet = () => {
-    setIsBottomSheetVisible(true);
+  const handleLogin = () => {
+    console.log('Navigate to login');
+    router.push('/auth/login');
   };
 
   return (
-      <SafeAreaView style={commonStyles.container}>
-        <View style={commonStyles.content}>
-          <Image
-            source={require('../assets/images/final_quest_240x240.png')}
-            style={{ width: 180, height: 180 }}
-            resizeMode="contain"
-          />
-          <Text style={commonStyles.title}>This is a placeholder app.</Text>
-          <Text style={commonStyles.text}>Your app will be displayed here when it's ready.</Text>
-
-          <TouchableOpacity
-            style={{
+    <SafeAreaView style={commonStyles.container}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View style={[commonStyles.content, { paddingTop: 60, paddingBottom: 40 }]}>
+          {/* Header Section */}
+          <View style={[commonStyles.centerContent, { marginBottom: 60 }]}>
+            <View style={{
               backgroundColor: colors.primary,
-              paddingHorizontal: 24,
-              paddingVertical: 12,
-              borderRadius: 8,
-              marginTop: 30,
-            }}
-            onPress={handleOpenBottomSheet}
-          >
-            <Text style={{
-              color: colors.text,
-              fontSize: 16,
-              fontWeight: '600',
+              borderRadius: 30,
+              padding: 20,
+              marginBottom: 24,
             }}>
-              Open Bottom Sheet
+              <Icon name="airplane" size={40} color="#FFFFFF" />
+            </View>
+            <Text style={commonStyles.title}>Airport Shuttle</Text>
+            <Text style={commonStyles.subtitle}>
+              Book your comfortable ride to and from the airport
             </Text>
-          </TouchableOpacity>
-        </View>
+          </View>
 
-        <SimpleBottomSheet
-          isVisible={isBottomSheetVisible}
-          onClose={() => setIsBottomSheetVisible(false)}
-        />
-      </SafeAreaView>
+          {/* Features Section */}
+          <View style={commonStyles.section}>
+            <View style={commonStyles.card}>
+              <View style={[commonStyles.row, { marginBottom: 16 }]}>
+                <Icon name="checkmark-circle" size={24} color={colors.success} />
+                <Text style={[commonStyles.text, { marginLeft: 12, flex: 1 }]}>
+                  Easy booking process
+                </Text>
+              </View>
+              <View style={[commonStyles.row, { marginBottom: 16 }]}>
+                <Icon name="people" size={24} color={colors.success} />
+                <Text style={[commonStyles.text, { marginLeft: 12, flex: 1 }]}>
+                  Add multiple passengers
+                </Text>
+              </View>
+              <View style={commonStyles.row}>
+                <Icon name="card" size={24} color={colors.success} />
+                <Text style={[commonStyles.text, { marginLeft: 12, flex: 1 }]}>
+                  Secure payment processing
+                </Text>
+              </View>
+            </View>
+          </View>
+
+          {/* Pricing Info */}
+          <View style={commonStyles.section}>
+            <View style={[commonStyles.card, { backgroundColor: colors.backgroundAlt }]}>
+              <Text style={[commonStyles.text, { fontWeight: '600', textAlign: 'center' }]}>
+                Starting from SBD 150 per person
+              </Text>
+            </View>
+          </View>
+
+          {/* Action Buttons */}
+          <View style={commonStyles.section}>
+            <Button
+              text="Create Account"
+              onPress={handleSignUp}
+              style={{ backgroundColor: colors.primary, marginBottom: 12 }}
+            />
+            <Button
+              text="Sign In"
+              onPress={handleLogin}
+              style={{ 
+                backgroundColor: colors.background, 
+                borderWidth: 2, 
+                borderColor: colors.primary 
+              }}
+              textStyle={{ color: colors.primary }}
+            />
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
