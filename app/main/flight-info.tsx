@@ -75,7 +75,7 @@ export default function FlightInfoScreen() {
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={commonStyles.content}>
           {/* Header */}
-          <View style={[commonStyles.row, { marginTop: 20, marginBottom: 40 }]}>
+          <View style={[commonStyles.row, { marginTop: 20, marginBottom: 30 }]}>
             <Button
               text=""
               onPress={handleBack}
@@ -85,6 +85,8 @@ export default function FlightInfoScreen() {
                 height: 40,
                 padding: 0,
                 marginRight: 16,
+                boxShadow: 'none',
+                elevation: 0,
               }}
               textStyle={{ display: 'none' }}
             >
@@ -100,27 +102,44 @@ export default function FlightInfoScreen() {
 
           {/* Trip Type Selection */}
           <View style={commonStyles.section}>
-            <Text style={commonStyles.inputLabel}>Trip Type</Text>
+            <Text style={[commonStyles.text, { fontWeight: '700', marginBottom: 16, fontSize: 18 }]}>
+              Trip Type
+            </Text>
             <View style={[commonStyles.row, { marginBottom: 16 }]}>
               <TouchableOpacity
                 style={[
                   {
                     flex: 1,
-                    padding: 12,
-                    borderRadius: 8,
+                    padding: 16,
+                    borderRadius: 12,
                     borderWidth: 2,
                     marginRight: 8,
                     alignItems: 'center',
                   },
                   flightData.tripType === 'one-way' 
-                    ? { borderColor: colors.primary, backgroundColor: colors.backgroundAlt }
+                    ? { 
+                        borderColor: colors.primary, 
+                        backgroundColor: `${colors.primary}10`,
+                        boxShadow: `0px 2px 8px ${colors.primary}30`,
+                        elevation: 3
+                      }
                     : { borderColor: colors.border, backgroundColor: colors.background }
                 ]}
                 onPress={() => handleInputChange('tripType', 'one-way')}
+                activeOpacity={0.7}
               >
+                <Icon 
+                  name="arrow-forward" 
+                  size={20} 
+                  color={flightData.tripType === 'one-way' ? colors.primary : colors.textLight} 
+                />
                 <Text style={[
                   commonStyles.text,
-                  { color: flightData.tripType === 'one-way' ? colors.primary : colors.textLight }
+                  { 
+                    color: flightData.tripType === 'one-way' ? colors.primary : colors.textLight,
+                    fontWeight: '600',
+                    marginTop: 8
+                  }
                 ]}>
                   One Way
                 </Text>
@@ -129,21 +148,36 @@ export default function FlightInfoScreen() {
                 style={[
                   {
                     flex: 1,
-                    padding: 12,
-                    borderRadius: 8,
+                    padding: 16,
+                    borderRadius: 12,
                     borderWidth: 2,
                     marginLeft: 8,
                     alignItems: 'center',
                   },
                   flightData.tripType === 'round-trip' 
-                    ? { borderColor: colors.primary, backgroundColor: colors.backgroundAlt }
+                    ? { 
+                        borderColor: colors.primary, 
+                        backgroundColor: `${colors.primary}10`,
+                        boxShadow: `0px 2px 8px ${colors.primary}30`,
+                        elevation: 3
+                      }
                     : { borderColor: colors.border, backgroundColor: colors.background }
                 ]}
                 onPress={() => handleInputChange('tripType', 'round-trip')}
+                activeOpacity={0.7}
               >
+                <Icon 
+                  name="swap-horizontal" 
+                  size={20} 
+                  color={flightData.tripType === 'round-trip' ? colors.primary : colors.textLight} 
+                />
                 <Text style={[
                   commonStyles.text,
-                  { color: flightData.tripType === 'round-trip' ? colors.primary : colors.textLight }
+                  { 
+                    color: flightData.tripType === 'round-trip' ? colors.primary : colors.textLight,
+                    fontWeight: '600',
+                    marginTop: 8
+                  }
                 ]}>
                   Round Trip
                 </Text>
@@ -153,6 +187,9 @@ export default function FlightInfoScreen() {
 
           {/* Flight Details */}
           <View style={commonStyles.section}>
+            <Text style={[commonStyles.text, { fontWeight: '700', marginBottom: 16, fontSize: 18 }]}>
+              Flight Details
+            </Text>
             <View style={commonStyles.card}>
               <Text style={commonStyles.inputLabel}>Flight Number *</Text>
               <TextInput
@@ -195,63 +232,119 @@ export default function FlightInfoScreen() {
 
           {/* Date and Time */}
           <View style={commonStyles.section}>
+            <Text style={[commonStyles.text, { fontWeight: '700', marginBottom: 16, fontSize: 18 }]}>
+              Schedule
+            </Text>
             <View style={commonStyles.card}>
-              <Text style={[commonStyles.text, { fontWeight: '600', marginBottom: 16 }]}>
-                Arrival Details
-              </Text>
+              <View style={[commonStyles.row, { marginBottom: 16, alignItems: 'center' }]}>
+                <View style={{
+                  backgroundColor: `${colors.primary}15`,
+                  borderRadius: 10,
+                  padding: 8,
+                  marginRight: 12,
+                }}>
+                  <Icon name="airplane" size={18} color={colors.primary} />
+                </View>
+                <Text style={[commonStyles.text, { fontWeight: '600', fontSize: 16 }]}>
+                  Arrival Details
+                </Text>
+              </View>
               
               <View style={[commonStyles.row, { marginBottom: 16 }]}>
                 <View style={{ flex: 1, marginRight: 8 }}>
                   <Text style={commonStyles.inputLabel}>Date</Text>
                   <TouchableOpacity
-                    style={[commonStyles.input, { justifyContent: 'center' }]}
+                    style={[commonStyles.input, { 
+                      justifyContent: 'center',
+                      backgroundColor: colors.backgroundAlt,
+                      borderColor: colors.primary
+                    }]}
                     onPress={() => showDateTimePicker('arrivalDate', 'date')}
+                    activeOpacity={0.7}
                   >
-                    <Text style={{ color: colors.text }}>
-                      {formatDate(flightData.arrivalDate)}
-                    </Text>
+                    <View style={[commonStyles.row, { justifyContent: 'space-between' }]}>
+                      <Text style={{ color: colors.text, fontWeight: '500' }}>
+                        {formatDate(flightData.arrivalDate)}
+                      </Text>
+                      <Icon name="calendar" size={16} color={colors.primary} />
+                    </View>
                   </TouchableOpacity>
                 </View>
                 <View style={{ flex: 1, marginLeft: 8 }}>
                   <Text style={commonStyles.inputLabel}>Time</Text>
                   <TouchableOpacity
-                    style={[commonStyles.input, { justifyContent: 'center' }]}
+                    style={[commonStyles.input, { 
+                      justifyContent: 'center',
+                      backgroundColor: colors.backgroundAlt,
+                      borderColor: colors.primary
+                    }]}
                     onPress={() => showDateTimePicker('arrivalTime', 'time')}
+                    activeOpacity={0.7}
                   >
-                    <Text style={{ color: colors.text }}>
-                      {formatTime(flightData.arrivalTime)}
-                    </Text>
+                    <View style={[commonStyles.row, { justifyContent: 'space-between' }]}>
+                      <Text style={{ color: colors.text, fontWeight: '500' }}>
+                        {formatTime(flightData.arrivalTime)}
+                      </Text>
+                      <Icon name="time" size={16} color={colors.primary} />
+                    </View>
                   </TouchableOpacity>
                 </View>
               </View>
 
               {flightData.tripType === 'round-trip' && (
                 <>
-                  <Text style={[commonStyles.text, { fontWeight: '600', marginBottom: 16 }]}>
-                    Return Departure Details
-                  </Text>
+                  <View style={[commonStyles.row, { marginBottom: 16, alignItems: 'center' }]}>
+                    <View style={{
+                      backgroundColor: `${colors.secondary}15`,
+                      borderRadius: 10,
+                      padding: 8,
+                      marginRight: 12,
+                    }}>
+                      <Icon name="airplane" size={18} color={colors.secondary} />
+                    </View>
+                    <Text style={[commonStyles.text, { fontWeight: '600', fontSize: 16 }]}>
+                      Return Departure Details
+                    </Text>
+                  </View>
                   
                   <View style={commonStyles.row}>
                     <View style={{ flex: 1, marginRight: 8 }}>
                       <Text style={commonStyles.inputLabel}>Date</Text>
                       <TouchableOpacity
-                        style={[commonStyles.input, { justifyContent: 'center' }]}
+                        style={[commonStyles.input, { 
+                          justifyContent: 'center',
+                          backgroundColor: colors.backgroundAlt,
+                          borderColor: colors.secondary
+                        }]}
                         onPress={() => showDateTimePicker('departureDate', 'date')}
+                        activeOpacity={0.7}
                       >
-                        <Text style={{ color: colors.text }}>
-                          {formatDate(flightData.departureDate)}
-                        </Text>
+                        <View style={[commonStyles.row, { justifyContent: 'space-between' }]}>
+                          <Text style={{ color: colors.text, fontWeight: '500' }}>
+                            {formatDate(flightData.departureDate)}
+                          </Text>
+                          <Icon name="calendar" size={16} color={colors.secondary} />
+                        </View>
                       </TouchableOpacity>
                     </View>
                     <View style={{ flex: 1, marginLeft: 8 }}>
                       <Text style={commonStyles.inputLabel}>Time</Text>
                       <TouchableOpacity
-                        style={[commonStyles.input, { justifyContent: 'center', marginBottom: 0 }]}
+                        style={[commonStyles.input, { 
+                          justifyContent: 'center', 
+                          marginBottom: 0,
+                          backgroundColor: colors.backgroundAlt,
+                          borderColor: colors.secondary
+                        }]}
                         onPress={() => showDateTimePicker('departureTime', 'time')}
+                        activeOpacity={0.7}
                       >
-                        <Text style={{ color: colors.text }}>
-                          {formatTime(flightData.departureTime)}
-                        </Text>
+                        <View style={[commonStyles.row, { justifyContent: 'space-between' }]}>
+                          <Text style={{ color: colors.text, fontWeight: '500' }}>
+                            {formatTime(flightData.departureTime)}
+                          </Text>
+                          <Icon name="time" size={16} color={colors.secondary} />
+                        </View>
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -262,22 +355,39 @@ export default function FlightInfoScreen() {
 
           {/* Document Requirements Notice */}
           <View style={commonStyles.section}>
-            <View style={[commonStyles.card, { backgroundColor: colors.backgroundAlt }]}>
-              <View style={[commonStyles.row, { marginBottom: 8 }]}>
-                <Icon name="information-circle" size={20} color={colors.primary} />
-                <Text style={[commonStyles.text, { marginLeft: 8, fontWeight: '600' }]}>
+            <View style={[commonStyles.card, { 
+              backgroundColor: `${colors.accent}08`,
+              borderColor: `${colors.accent}20`,
+              borderWidth: 1
+            }]}>
+              <View style={[commonStyles.row, { marginBottom: 12, alignItems: 'center' }]}>
+                <View style={{
+                  backgroundColor: colors.accent,
+                  borderRadius: 10,
+                  padding: 8,
+                  marginRight: 12,
+                }}>
+                  <Icon name="information-circle" size={18} color="#FFFFFF" />
+                </View>
+                <Text style={[commonStyles.text, { fontWeight: '700', fontSize: 16 }]}>
                   Required Documents
                 </Text>
               </View>
-              <Text style={commonStyles.textLight}>
+              <Text style={[commonStyles.textLight, { marginBottom: 8 }]}>
                 To complete your shuttle booking, you&apos;ll need to upload:
               </Text>
-              <Text style={[commonStyles.textLight, { marginTop: 4 }]}>
-                • Copy of passport
-              </Text>
-              <Text style={[commonStyles.textLight, { marginTop: 2 }]}>
-                • Copy of credit card details
-              </Text>
+              <View style={[commonStyles.row, { marginBottom: 4, alignItems: 'center', justifyContent: 'flex-start' }]}>
+                <Icon name="document-text" size={14} color={colors.success} />
+                <Text style={[commonStyles.textLight, { marginLeft: 8 }]}>
+                  Copy of passport
+                </Text>
+              </View>
+              <View style={[commonStyles.row, { alignItems: 'center', justifyContent: 'flex-start' }]}>
+                <Icon name="card" size={14} color={colors.success} />
+                <Text style={[commonStyles.textLight, { marginLeft: 8 }]}>
+                  Copy of credit card details
+                </Text>
+              </View>
             </View>
           </View>
 
@@ -286,7 +396,14 @@ export default function FlightInfoScreen() {
             <Button
               text="Continue to Passengers"
               onPress={handleContinue}
-              style={{ backgroundColor: colors.primary }}
+              style={{ 
+                backgroundColor: colors.primary,
+                borderRadius: 12,
+                padding: 18,
+                boxShadow: `0px 6px 20px ${colors.primary}40`,
+                elevation: 6
+              }}
+              textStyle={{ fontSize: 16, fontWeight: '700' }}
             />
           </View>
 

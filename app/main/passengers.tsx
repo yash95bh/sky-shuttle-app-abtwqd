@@ -31,6 +31,8 @@ export default function PassengersScreen() {
   const pricePerPerson = 150;
   const totalPrice = passengers.length * pricePerPerson;
 
+  console.log(`Current passengers: ${passengers.length}, Total price: SBD ${totalPrice}`);
+
   const handlePassengerChange = (id: string, field: keyof Passenger, value: string) => {
     setPassengers(prev => prev.map(passenger => 
       passenger.id === id ? { ...passenger, [field]: value } : passenger
@@ -60,7 +62,7 @@ export default function PassengersScreen() {
 
   const handleContinue = () => {
     console.log('Continue with passengers:', passengers);
-    console.log('Total price:', totalPrice);
+    console.log('Total price calculation: SBD', totalPrice);
     
     // Validate all passengers have required fields
     const isValid = passengers.every(passenger => 
@@ -99,7 +101,7 @@ export default function PassengersScreen() {
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={commonStyles.content}>
           {/* Header */}
-          <View style={[commonStyles.row, { marginTop: 20, marginBottom: 40 }]}>
+          <View style={[commonStyles.row, { marginTop: 20, marginBottom: 30 }]}>
             <Button
               text=""
               onPress={handleBack}
@@ -109,6 +111,8 @@ export default function PassengersScreen() {
                 height: 40,
                 padding: 0,
                 marginRight: 16,
+                boxShadow: 'none',
+                elevation: 0,
               }}
               textStyle={{ display: 'none' }}
             >
@@ -124,24 +128,39 @@ export default function PassengersScreen() {
 
           {/* Price Summary at Top */}
           <View style={commonStyles.section}>
-            <View style={[commonStyles.card, { backgroundColor: colors.backgroundAlt }]}>
-              <View style={[commonStyles.row, { marginBottom: 8 }]}>
-                <Icon name="calculator" size={20} color={colors.primary} />
-                <Text style={[commonStyles.text, { marginLeft: 8, fontWeight: '600' }]}>
+            <View style={[commonStyles.card, { 
+              backgroundColor: `${colors.primary}08`,
+              borderColor: `${colors.primary}20`,
+              borderWidth: 1
+            }]}>
+              <View style={[commonStyles.row, { marginBottom: 12, alignItems: 'center' }]}>
+                <View style={{
+                  backgroundColor: colors.primary,
+                  borderRadius: 10,
+                  padding: 8,
+                  marginRight: 12,
+                }}>
+                  <Icon name="calculator" size={18} color="#FFFFFF" />
+                </View>
+                <Text style={[commonStyles.text, { fontWeight: '700', fontSize: 16 }]}>
                   Price Calculator
                 </Text>
               </View>
               
-              <View style={[commonStyles.row, { marginBottom: 8 }]}>
-                <Text style={commonStyles.textLight}>
-                  {passengers.length} passenger{passengers.length > 1 ? 's' : ''} × SBD {pricePerPerson} per person
+              <View style={[commonStyles.row, { marginBottom: 12 }]}>
+                <Text style={[commonStyles.text, { fontWeight: '500' }]}>
+                  {passengers.length} passenger{passengers.length > 1 ? 's' : ''} × SBD {pricePerPerson}
                 </Text>
-                <Text style={[commonStyles.text, { fontWeight: '600', color: colors.primary }]}>
+                <Text style={[commonStyles.text, { 
+                  fontWeight: '700', 
+                  fontSize: 20, 
+                  color: colors.primary 
+                }]}>
                   SBD {totalPrice}
                 </Text>
               </View>
               
-              <Text style={[commonStyles.textLight, { fontSize: 12 }]}>
+              <Text style={[commonStyles.textLight, { fontSize: 12, textAlign: 'center' }]}>
                 Price updates automatically as you add or remove passengers
               </Text>
             </View>
@@ -149,18 +168,30 @@ export default function PassengersScreen() {
 
           {/* Passengers List */}
           <View style={commonStyles.section}>
+            <Text style={[commonStyles.text, { fontWeight: '700', marginBottom: 16, fontSize: 18 }]}>
+              Passenger Information
+            </Text>
             {passengers.map((passenger, index) => (
               <View key={passenger.id} style={[commonStyles.card, { marginBottom: 16 }]}>
-                <View style={[commonStyles.row, { marginBottom: 16 }]}>
-                  <Text style={[commonStyles.text, { fontWeight: '600', flex: 1 }]}>
-                    Passenger {index + 1}
-                  </Text>
+                <View style={[commonStyles.row, { marginBottom: 20 }]}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={[commonStyles.text, { fontWeight: '700', fontSize: 16 }]}>
+                      Passenger {index + 1}
+                    </Text>
+                    <Text style={[commonStyles.textLight, { fontSize: 12 }]}>
+                      All fields are required
+                    </Text>
+                  </View>
                   {passengers.length > 1 && (
                     <TouchableOpacity
                       onPress={() => removePassenger(passenger.id)}
-                      style={{ padding: 4 }}
+                      style={{ 
+                        backgroundColor: `${colors.error}15`,
+                        borderRadius: 8,
+                        padding: 8
+                      }}
                     >
-                      <Icon name="close-circle" size={20} color={colors.error} />
+                      <Icon name="close" size={16} color={colors.error} />
                     </TouchableOpacity>
                   )}
                 </View>
@@ -211,22 +242,34 @@ export default function PassengersScreen() {
               style={[
                 commonStyles.card,
                 { 
-                  backgroundColor: colors.backgroundAlt,
+                  backgroundColor: `${colors.primary}05`,
                   borderStyle: 'dashed',
                   borderWidth: 2,
                   borderColor: colors.primary,
                   alignItems: 'center',
                   justifyContent: 'center',
-                  paddingVertical: 30,
+                  paddingVertical: 32,
                 }
               ]}
               onPress={addPassenger}
+              activeOpacity={0.7}
             >
-              <Icon name="add-circle" size={32} color={colors.primary} />
-              <Text style={[commonStyles.text, { color: colors.primary, marginTop: 8 }]}>
+              <View style={{
+                backgroundColor: colors.primary,
+                borderRadius: 50,
+                padding: 12,
+                marginBottom: 12,
+              }}>
+                <Icon name="add" size={24} color="#FFFFFF" />
+              </View>
+              <Text style={[commonStyles.text, { 
+                color: colors.primary, 
+                fontWeight: '600',
+                marginBottom: 4
+              }]}>
                 Add Another Passenger
               </Text>
-              <Text style={[commonStyles.textLight, { marginTop: 4, fontSize: 12 }]}>
+              <Text style={[commonStyles.textLight, { fontSize: 12 }]}>
                 +SBD {pricePerPerson} per additional passenger
               </Text>
             </TouchableOpacity>
@@ -234,23 +277,34 @@ export default function PassengersScreen() {
 
           {/* Document Requirements */}
           <View style={commonStyles.section}>
-            <View style={[commonStyles.card, { backgroundColor: colors.backgroundAlt }]}>
-              <View style={[commonStyles.row, { marginBottom: 8 }]}>
-                <Icon name="document-text" size={20} color={colors.primary} />
-                <Text style={[commonStyles.text, { marginLeft: 8, fontWeight: '600' }]}>
+            <View style={[commonStyles.card, { 
+              backgroundColor: `${colors.accent}08`,
+              borderColor: `${colors.accent}20`,
+              borderWidth: 1
+            }]}>
+              <View style={[commonStyles.row, { marginBottom: 12, alignItems: 'center' }]}>
+                <View style={{
+                  backgroundColor: colors.accent,
+                  borderRadius: 10,
+                  padding: 8,
+                  marginRight: 12,
+                }}>
+                  <Icon name="document-text" size={18} color="#FFFFFF" />
+                </View>
+                <Text style={[commonStyles.text, { fontWeight: '700', fontSize: 16 }]}>
                   Required Documents
                 </Text>
               </View>
-              <Text style={commonStyles.textLight}>
+              <Text style={[commonStyles.textLight, { marginBottom: 12 }]}>
                 Before booking, ensure you have uploaded:
               </Text>
-              <View style={[commonStyles.row, { marginTop: 8, alignItems: 'center' }]}>
+              <View style={[commonStyles.row, { marginBottom: 8, alignItems: 'center', justifyContent: 'flex-start' }]}>
                 <Icon name="checkmark-circle" size={16} color={colors.success} />
                 <Text style={[commonStyles.textLight, { marginLeft: 8 }]}>
                   Copy of passport
                 </Text>
               </View>
-              <View style={[commonStyles.row, { marginTop: 4, alignItems: 'center' }]}>
+              <View style={[commonStyles.row, { alignItems: 'center', justifyContent: 'flex-start' }]}>
                 <Icon name="checkmark-circle" size={16} color={colors.success} />
                 <Text style={[commonStyles.textLight, { marginLeft: 8 }]}>
                   Copy of credit card details
@@ -261,17 +315,25 @@ export default function PassengersScreen() {
 
           {/* Final Price Summary */}
           <View style={commonStyles.section}>
-            <View style={[commonStyles.card, { backgroundColor: colors.primary, opacity: 0.1 }]}>
+            <View style={[commonStyles.card, { 
+              backgroundColor: `${colors.secondary}08`,
+              borderColor: `${colors.secondary}20`,
+              borderWidth: 1
+            }]}>
               <View style={[commonStyles.row, { alignItems: 'center' }]}>
                 <View style={{ flex: 1 }}>
-                  <Text style={[commonStyles.text, { fontWeight: '600', color: colors.primary }]}>
+                  <Text style={[commonStyles.text, { fontWeight: '700', color: colors.secondary }]}>
                     Total Amount
                   </Text>
                   <Text style={[commonStyles.textLight, { fontSize: 12 }]}>
-                    {passengers.length} passenger{passengers.length > 1 ? 's' : ''} × SBD {pricePerPerson}
+                    {passengers.length} passenger{passengers.length > 1 ? 's' : ''} × SBD {pricePerPerson} per person
                   </Text>
                 </View>
-                <Text style={[commonStyles.text, { fontWeight: '700', fontSize: 24, color: colors.primary }]}>
+                <Text style={[commonStyles.text, { 
+                  fontWeight: '800', 
+                  fontSize: 28, 
+                  color: colors.secondary 
+                }]}>
                   SBD {totalPrice}
                 </Text>
               </View>
@@ -283,7 +345,14 @@ export default function PassengersScreen() {
             <Button
               text={`Continue - SBD ${totalPrice}`}
               onPress={handleContinue}
-              style={{ backgroundColor: colors.primary }}
+              style={{ 
+                backgroundColor: colors.primary,
+                borderRadius: 12,
+                padding: 18,
+                boxShadow: `0px 6px 20px ${colors.primary}40`,
+                elevation: 6
+              }}
+              textStyle={{ fontSize: 16, fontWeight: '700' }}
             />
           </View>
         </View>

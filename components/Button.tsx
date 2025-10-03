@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Text, TouchableOpacity, StyleSheet, ViewStyle, TextStyle } from 'react-native';
 import { colors } from '../styles/commonStyles';
@@ -12,7 +13,11 @@ interface ButtonProps {
 
 export default function Button({ text, onPress, style, textStyle, children }: ButtonProps) {
   return (
-    <TouchableOpacity style={[styles.button, style]} onPress={onPress} activeOpacity={0.7}>
+    <TouchableOpacity 
+      style={[styles.button, style]} 
+      onPress={onPress} 
+      activeOpacity={0.8}
+    >
       {children || <Text style={[styles.buttonText, textStyle]}>{text}</Text>}
     </TouchableOpacity>
   );
@@ -21,18 +26,20 @@ export default function Button({ text, onPress, style, textStyle, children }: Bu
 const styles = StyleSheet.create({
   button: {
     backgroundColor: colors.primary,
-    padding: 14,
-    borderRadius: 8,
+    padding: 16,
+    borderRadius: 12,
     width: '100%',
-    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.15)',
-    elevation: 3,
+    boxShadow: `0px 4px 16px ${colors.primary}30`,
+    elevation: 4,
     alignItems: 'center',
     justifyContent: 'center',
+    minHeight: 52,
   },
   buttonText: {
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '600',
     textAlign: 'center',
+    letterSpacing: 0.3,
   },
 });
